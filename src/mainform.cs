@@ -6,6 +6,25 @@ using System.Drawing;
 
 namespace Volfinder {
     public partial class MainForm {
+        public RadioButton CreateRadioWithName( string name ){
+            RadioButton rbutton = new RadioButton();
+            rbutton.AutoSize = true;
+            rbutton.Text = name;
+            return rbutton;
+        }
+        public GroupBox CreateFlowGroupBox(int width,int height){
+            GroupBox groupbox = new GroupBox();
+            FlowLayoutPanel flowPnl = new FlowLayoutPanel();
+
+            groupbox.Width = width;
+            groupbox.Height = height;
+            flowPnl.Width = width - 10;
+            flowPnl.Height = height - 20;
+            flowPnl.Location = new Point(5,15);
+
+            groupbox.Controls.Add( flowPnl );
+            return groupbox;
+        }
         public void Run(){
             Form mainForm = new Form();
             mainForm.Text = "Volfinder";
@@ -31,45 +50,31 @@ namespace Volfinder {
             /* Sync the height of text box with button */
             targetPath.AutoSize = false;
 
-            /* Create the search options groupbox */
-            GroupBox searchOptions = new GroupBox();
+            GroupBox searchOptions = this.CreateFlowGroupBox(605,130);
             searchOptions.Text = "Search Options";
             searchOptions.Location = new Point(10,70);
-            searchOptions.Size = new Size(605,100);
             searchOptions.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 
-            /* Create the search value type radio button */
-            GroupBox valueTypeOptions = new GroupBox();
-            valueTypeOptions.Text = "Type";
-            valueTypeOptions.Size = new Size(580,40);
-            valueTypeOptions.Location = new Point(12,15);
-            valueTypeOptions.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            searchOptions.Controls.Add( valueTypeOptions );
+            GroupBox typeOptionBox = this.CreateFlowGroupBox( searchOptions.Controls[0].Width - 5,48 );
+            typeOptionBox.Text = "Value Type";
+            typeOptionBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            searchOptions.Controls[0].Controls.Add( typeOptionBox );
 
-            RadioButton stringTypeRadio = new RadioButton();
-            stringTypeRadio.Text = "String";
-            stringTypeRadio.Width = 145;
-            stringTypeRadio.Dock = DockStyle.Left;
+            FlowLayoutPanel typeOptionPnl = new FlowLayoutPanel();
+            typeOptionPnl.FlowDirection = FlowDirection.LeftToRight;
+            typeOptionPnl.Controls.Add( this.CreateRadioWithName("String") );
+            typeOptionPnl.Controls.Add( this.CreateRadioWithName("Hex") );
+            typeOptionPnl.Controls.Add( this.CreateRadioWithName("Decimal") );
+            typeOptionPnl.Controls.Add( this.CreateRadioWithName("Octal") );
+            typeOptionBox.Controls[0].Controls.Add( typeOptionPnl );
 
-            RadioButton hexTypeRadio = new RadioButton();
-            hexTypeRadio.Text = "Hexadecimal";
-            hexTypeRadio.Width = 145;
-            hexTypeRadio.Dock = DockStyle.Left;
+            GroupBox inputBox = this.CreateFlowGroupBox( searchOptions.Controls[0].Width - 5,48 );
+            inputBox.Text = "Input Target Value";
+            searchOptions.Controls[0].Controls.Add( inputBox );
 
-            RadioButton binTypeRadio = new RadioButton();
-            binTypeRadio.Text = "Binary";
-            binTypeRadio.Width = 145;
-            binTypeRadio.Dock = DockStyle.Left;
-
-            RadioButton deciamlTypeRadio = new RadioButton();
-            deciamlTypeRadio.Text = "Decimal";
-            deciamlTypeRadio.Width = 140;
-            deciamlTypeRadio.Dock = DockStyle.Left;
-
-            valueTypeOptions.Controls.Add( stringTypeRadio );
-            valueTypeOptions.Controls.Add( hexTypeRadio );
-            valueTypeOptions.Controls.Add( binTypeRadio );
-            valueTypeOptions.Controls.Add( deciamlTypeRadio );
+            TextBox inputText = new TextBox();
+            inputText.Width = inputBox.Controls[0].Width - 5;
+            inputBox.Controls[0].Controls.Add( inputText );
 
             /* Append Controls into the main Window */
             mainForm.Controls.Add( openDirBtn );
